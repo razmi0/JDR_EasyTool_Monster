@@ -47,6 +47,6 @@ export const getRandomColor = () => {
   const r = Math.floor(Math.random() * 255) + 1;
   const g = Math.floor(Math.random() * 255) + 1;
   const b = Math.floor(Math.random() * 255) + 1;
-  const a = 1;
+  const a = 0.8;
   return `rgba(${r},${g},${b},${a})`;
 };
