@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Json
-*.json
+# Data
+raw_data.json
