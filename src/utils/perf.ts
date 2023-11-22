@@ -1,5 +1,4 @@
 import { memoryUsage } from "node:process";
-import chalk from "chalk";
 import Time from "./Time.js";
 import Mem from "./Mem.js";
 import Trash from "./Trash.js";
@@ -173,18 +172,18 @@ function log(
 ) {
   description = description == "" ? (description = "No description") : description;
   return `
-    ${chalk.blue("Function             : ")}${fnName}
-    ${chalk.blue("Description          : ")}${description}
+    ${"Function             : "}${fnName}
+    ${"Description          : "}${description}
     ---
-    ${chalk.blue("Total Runtime        : ")}${t_stats.sum}
-    ${chalk.blue("Average Runtime/Fn   : ")}${t_stats.mean}
-    ${chalk.blue("SD                   : ")}± ${t_stats.std_dev}
+    ${"Total Runtime        : "}${t_stats.sum}
+    ${"Average Runtime/Fn   : "}${t_stats.mean}
+    ${"SD                   : "}± ${t_stats.std_dev}
     ---
-    ${chalk.blue("Total Heap used      : ")}${h_stats.sum}
-    ${chalk.blue("Average Heap used/Fn : ")}${h_stats.mean}
-    ${chalk.blue("SD                   : ")}± ${h_stats.std_dev}
+    ${"Total Heap used      : "}${h_stats.sum}
+    ${"Average Heap used/Fn : "}${h_stats.mean}
+    ${"SD                   : "}± ${h_stats.std_dev}
     ---
-    ${chalk.blue("Performed            : ")}${cap} times
-    ${chalk.blue("Last Result          : ")}${trash}
+    ${"Performed            : "}${cap} times
+    ${"Last Result          : "}${trash}
     `;
 }
