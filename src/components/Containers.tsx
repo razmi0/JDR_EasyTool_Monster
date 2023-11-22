@@ -6,16 +6,21 @@ export const ListElement = ({ children }: Container) => {
   return <li className={styles["listElementStyle"]}>{children}</li>;
 };
 
-interface NameProps extends Container {
+interface NameProps {
   name: string;
-  handleClick: () => void;
+  handleOpenRadar: () => void;
+  handleOpenStats: () => void;
+  children: ReactNode[];
 }
-export const NameButton = ({ name, handleClick, children }: NameProps) => {
+export const NameButton = ({ name, handleOpenRadar, handleOpenStats, children }: NameProps) => {
   return (
     <div id="name" className={styles["name-ctn"]}>
       <span className={styles["name-style"]}> {name} </span>
-      <button className={styles["button-style"]} onClick={handleClick}>
-        {children}
+      <button className={styles["button-style"]} onClick={handleOpenStats}>
+        {children[0]}
+      </button>
+      <button className={styles["button-style"]} onClick={handleOpenRadar}>
+        {children[1]}
       </button>
     </div>
   );

@@ -26,10 +26,10 @@ li {
 }
 .statsAndChart-ctn {
   display: flex;
+  justify-content: space-between;
 }
 .chart-global-ctn {
   display: grid;
-  place-content: center;
 }
 .chart-ctn {
   display: flex;
@@ -50,11 +50,15 @@ li {
 }
 
 .stats-flex-ctn {
-  display: flex;
+  display: flow-root;
   align-items: center;
 }
 
 .stats-text {
   font-weight: bold;
   font-size: 18px;
+}
+
+.spacer {
+  margin-bottom: 1rem;
 }

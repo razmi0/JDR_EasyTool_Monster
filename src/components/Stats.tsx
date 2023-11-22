@@ -3,16 +3,17 @@ import styles from "./_.module.css";
 type StatsProps = {
   label: string;
   value: string;
+  open: boolean;
 };
-export const Stats = ({ label, value }: StatsProps) => {
+export const Stats = ({ label, value, open }: StatsProps) => {
   return (
-    <div className={styles["stats-flex-ctn"]}>
-      <div>
+    <details className={styles["stats-flex-ctn"]} open={open}>
+      <summary>
         <span className={styles["stats-text"]}>
           {label.charAt(0).toUpperCase() + label.slice(1)}
-        </span>{" "}
-        : {value}
-      </div>
-    </div>
+        </span>
+      </summary>
+      <div style={{ marginLeft: "50px" }}>{value}</div>
+    </details>
   );
 };

@@ -17,11 +17,20 @@ const LIMITER = 10;
 
 const App = () => {
   const [openRadar, setOpenRadar] = useState(new Array(LIMITER).fill(false));
+  const [openStats, setOpenStats] = useState(new Array(LIMITER).fill(false));
   const { data } = creatures;
   const { finalData, finalChart } = cleanData(data.slice(0, LIMITER));
 
-  const handleClick = (i: number) => {
+  const handleOpenRadar = (i: number) => {
     setOpenRadar((prev) => {
+      const newArr = [...prev];
+      newArr[i] = !newArr[i];
+      return newArr;
+    });
+  };
+
+  const handleOpenStats = (i: number) => {
+    setOpenStats((prev) => {
       const newArr = [...prev];
       newArr[i] = !newArr[i];
       return newArr;
@@ -38,16 +47,22 @@ const App = () => {
           const rest = newData.slice(1);
           return (
             <ListElement key={i}>
-              <NameButton name={name} handleClick={() => handleClick(i)}>
-                Reveal radar
+              <NameButton
+                name={name}
+                handleOpenRadar={() => handleOpenRadar(i)}
+                handleOpenStats={() => handleOpenStats(i)}
+              >
+                <>Reveal stats</>
+                <>Reveal radar</>
               </NameButton>
               <StatsAndChart>
                 <StatsContainer>
                   {rest.map(([label, value]) => {
-                    if (value === "" || finalChart[i].labels.includes(label))
-                      return <Fragment key={label} />;
-
-                    return <Stats label={label} value={value} key={label} />;
+                    return value === "" || finalChart[i].labels.includes(label) ? (
+                      <Fragment key={label} />
+                    ) : (
+                      <Stats label={label} value={value} key={label} open={openStats[i]} />
+                    );
                   })}
                 </StatsContainer>
                 <ChartContainer isOpen={openRadar[i]}>
