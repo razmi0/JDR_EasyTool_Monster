@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import { getRandomColor } from "./helpers";
+import { ChartTitle } from "./Containers";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
@@ -28,7 +29,71 @@ ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, 
 // };
 
 const options: ChartOptions<"radar"> = {
-  maintainAspectRatio: false,
+  normalized: true,
+  spanGaps: true,
+  interaction: {
+    mode: "nearest",
+  },
+  elements: {
+    point: {
+      hitRadius: 30,
+      hoverRadius: 8,
+      radius: 4,
+    },
+  },
+  responsive: true,
+  animations: {
+    radius: {
+      duration: 200,
+      easing: "linear",
+    },
+  },
+  scales: {
+    r: {
+      grid: {
+        circular: true,
+        color: "#ffffff2c",
+      },
+      ticks: {
+        display: false,
+      },
+      pointLabels: {
+        display: true,
+        callback: (label) => {
+          return label.charAt(0).toUpperCase() + label.slice(1);
+        },
+      },
+      beginAtZero: true,
+    },
+  },
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: false,
+    },
+
+    tooltip: {
+      displayColors: false,
+      backgroundColor: "#ffffff80",
+      bodyColor: "#242424",
+      padding: 10,
+      bodyFont: {
+        size: 14,
+        weight: "bold",
+      },
+      callbacks: {
+        label: (context) => {
+          const { label, raw } = context;
+          return `${label.toUpperCase()} : ${raw}`;
+        },
+        title: () => {
+          return "";
+        },
+      },
+    },
+  },
 };
 
 export function RadarChart({ data }: { data: ChartData<"radar"> }) {
@@ -42,17 +107,9 @@ export function RadarChart({ data }: { data: ChartData<"radar"> }) {
   };
 
   return (
-    <div
-      style={{
-        height: "500px",
-        width: "500px",
-        position: "absolute",
-        right: "0px",
-        marginRight: "3%",
-        transform: "translateY(200px)",
-      }}
-    >
+    <>
+      <ChartTitle>General Stats</ChartTitle>
       <Radar data={finalData} options={options} />
-    </div>
+    </>
   );
 }

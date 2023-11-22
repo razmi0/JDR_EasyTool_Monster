@@ -2,24 +2,23 @@ import creatures from "@Data";
 import { RadarChart } from "./components/Charts";
 import { Fragment, useState } from "react";
 import { DataType, HeatAllDataType, OptionalAllDataType } from "./types";
-import { beautifyK, empty, getGenericStats, noNumbers, show } from "./components/helpers";
+import { beautifyK, empty, getGenericStats, noNumbers } from "./components/helpers";
 import { ChartData } from "chart.js";
+import {
+  ListElement,
+  Name,
+  StatsAndChart,
+  ChartContainer,
+  StatsContainer,
+} from "./components/Containers";
+import { Stats } from "./components/Stats";
 
-const LIMITER = 2;
+const LIMITER = 10;
 
 const App = () => {
   const [openRadar, setOpenRadar] = useState(new Array(LIMITER).fill(false));
   const { data } = creatures;
-  const {
-    finalData,
-    nullable,
-    nbrsMap,
-    allKeys,
-    heatOnlyNbrs,
-    heatNbrsObj,
-    sortedHeat,
-    finalChart,
-  } = cleanData(data.slice(0, LIMITER));
+  const { finalData, finalChart } = cleanData(data.slice(0, LIMITER));
 
   const handleClick = (i: number) => {
     setOpenRadar((prev) => {
@@ -29,49 +28,33 @@ const App = () => {
     });
   };
 
-  show(finalData.length, "finalData.length");
-  show(nullable.size, "nullable.size");
-  show(nbrsMap.size, "nbrsMap.size");
-  show(allKeys.size, "allKeys.size");
-  show(heatOnlyNbrs.length, "heatOnlyNbrs.length");
-  show(Object.keys(heatNbrsObj).length, "heatNbrsObj.length");
-  show(sortedHeat.length, "sortedHeat.length");
-  show(finalChart, "finalChart");
-
   return (
     <>
       <h1>Mythical Creatures</h1>
       <ul>
         {finalData.map((creature, i) => {
           const newData = Object.entries(creature);
+          const name = newData[0][1]; // value
+          const rest = newData.slice(1);
           return (
-            <li key={i} style={{ listStyle: "none", marginTop: "2rem", marginBottom: "2rem" }}>
-              {newData.map(([key, value]) => {
-                if (value === "") return <Fragment key={key}></Fragment>;
+            <ListElement key={i}>
+              <Name name={name} handleClick={() => handleClick(i)}>
+                Reveal radar
+              </Name>
+              <StatsAndChart>
+                <StatsContainer>
+                  {rest.map(([label, value]) => {
+                    if (value === "" || finalChart[i].labels.includes(label))
+                      return <Fragment key={label} />;
 
-                return (
-                  <div
-                    key={key}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "1rem",
-                    }}
-                  >
-                    <div style={{}}>
-                      <span style={{ fontWeight: "bold", fontSize: " 18px" }}>
-                        {key.charAt(0).toUpperCase() + key.slice(1)}
-                      </span>
-                      : {value}
-                    </div>
-                    {key === "name" && <button onClick={() => handleClick(i)}>Reveal</button>}
-                    {key === "name" && openRadar[i] && (
-                      <RadarChart data={finalChart[i] as ChartData<"radar">} />
-                    )}
-                  </div>
-                );
-              })}
-            </li>
+                    return <Stats label={label} value={value} key={label} />;
+                  })}
+                </StatsContainer>
+                <ChartContainer isOpen={openRadar[i]}>
+                  <RadarChart data={finalChart[i] as ChartData<"radar">} />
+                </ChartContainer>
+              </StatsAndChart>
+            </ListElement>
           );
         })}
       </ul>
@@ -112,13 +95,13 @@ const cleanData = (data: DataType[]) => {
 
       if (map.has(key)) {
         value += ", " + map.get(key);
-        value = value.replace(/,\s,/g, "");
       }
 
       //FINAL DATA
       //--
 
       map.set(key, value);
+      value = value.replace(/,\s,/g, "").replace(/\s,\s/g, "");
       value = value.toLowerCase().trim();
       value = value.charAt(0).toUpperCase() + value.slice(1);
 
