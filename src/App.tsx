@@ -6,7 +6,7 @@ import { beautifyK, empty, getGenericStats, noNumbers } from "./components/helpe
 import { ChartData } from "chart.js";
 import {
   ListElement,
-  Name,
+  NameButton,
   StatsAndChart,
   ChartContainer,
   StatsContainer,
@@ -38,9 +38,9 @@ const App = () => {
           const rest = newData.slice(1);
           return (
             <ListElement key={i}>
-              <Name name={name} handleClick={() => handleClick(i)}>
+              <NameButton name={name} handleClick={() => handleClick(i)}>
                 Reveal radar
-              </Name>
+              </NameButton>
               <StatsAndChart>
                 <StatsContainer>
                   {rest.map(([label, value]) => {

@@ -10,7 +10,7 @@ interface NameProps extends Container {
   name: string;
   handleClick: () => void;
 }
-export const Name = ({ name, handleClick, children }: NameProps) => {
+export const NameButton = ({ name, handleClick, children }: NameProps) => {
   return (
     <div id="name" className={styles["name-ctn"]}>
       <span className={styles["name-style"]}> {name} </span>
