@@ -17,5 +17,6 @@ module.exports = {
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-this-alias": "warn",
   },
 };
