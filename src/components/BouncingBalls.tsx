@@ -1,4 +1,4 @@
-import { getRandomColor } from "./helpers";
+import { getRandomColor } from "../helpers/helpers";
 
 export const BouncingBalls = () => {
   const canvas = {

@@ -1,7 +1,7 @@
 import { ReactNode, useId } from "react";
 import styles from "./_.module.css";
-import { scrollToTop } from "./helpers";
-import { Fire } from "@/icons/Icons";
+import { scrollToTop } from "../helpers/helpers";
+import { Fire } from "@/components/icons/Icons";
 
 type Container = { children: ReactNode };
 

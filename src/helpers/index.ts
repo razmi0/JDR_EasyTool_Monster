@@ -1,3 +1,33 @@
-import * as Helpers from "./helpers";
+// import {
+//   addColorstoCharts,
+//   beautifyK,
+//   cleanData,
+//   cleanValue,
+//   debounce,
+//   empty,
+//   getAllRandomColors,
+//   getElementsAroundIndex,
+//   getGenericStats,
+//   getRandomColor,
+//   isDevEnv,
+//   noNumbers,
+//   scrollToTop,
+//   show,
+// } from "./helpers";
 
-export default Helpers;
+export {
+  addColorstoCharts,
+  beautifyK,
+  cleanData,
+  cleanValue,
+  debounce,
+  empty,
+  getAllRandomColors,
+  getElementsAroundIndex,
+  getGenericStats,
+  getRandomColor,
+  isDevEnv,
+  noNumbers,
+  scrollToTop,
+  show,
+} from "./helpers";

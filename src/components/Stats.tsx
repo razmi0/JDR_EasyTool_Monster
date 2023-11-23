@@ -1,19 +1,37 @@
+import { useId } from "react";
 import styles from "./_.module.css";
 
 type StatsProps = {
   label: string;
   value: string;
   open: boolean;
+  color: string;
 };
-export const Stats = ({ label, value, open }: StatsProps) => {
+export const Stats = ({ label, value, open, color }: StatsProps) => {
+  const summaryId = useId().replace(/:/g, "_") + "_stats";
+  const labelId = useId().replace(/:/g, "_") + "_label";
+
   return (
-    <details className={styles["stats-flex-ctn"]} open={open}>
-      <summary>
-        <span className={styles["stats-text"]}>
-          {label.charAt(0).toUpperCase() + label.slice(1)}
-        </span>
-      </summary>
-      <div style={{ marginLeft: "50px" }}>{value}</div>
-    </details>
+    <>
+      <style>
+        {`
+          summary#${summaryId}::marker {
+            color: ${color};
+          }
+          span#${labelId}:hover {
+            color: ${color};
+            cursor: pointer;
+          }
+      `}
+      </style>
+      <details className={styles["stats-details"]} open={open}>
+        <summary id={summaryId}>
+          <span className={styles["stats-summary-text"]} id={labelId}>
+            {label.charAt(0).toUpperCase() + label.slice(1)}
+          </span>
+        </summary>
+        <div style={{ marginLeft: "50px", fontWeight: "bold" }}>{value}</div>
+      </details>
+    </>
   );
 };
