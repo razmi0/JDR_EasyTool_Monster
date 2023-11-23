@@ -7,11 +7,18 @@
 li {
   list-style: none;
 }
+.input-element {
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  outline: none;
+}
+
 .name-ctn {
   width: 100%;
   display: flex;
-  align-items: stretch;
-  justify-content: center;
+  align-items: center;
+  justify-content: flex-start;
   margin: 2rem 0;
 }
 
@@ -26,7 +33,7 @@ li {
 }
 .statsAndChart-ctn {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 .chart-global-ctn {
   display: grid;
@@ -49,14 +56,16 @@ li {
   font-weight: 700;
 }
 
-.stats-flex-ctn {
-  display: flow-root;
-  align-items: center;
+.stats-details {
+  display: block;
+  /* align-items: center; */
+  width: fit-content;
 }
 
-.stats-text {
+.stats-summary-text {
   font-weight: bold;
   font-size: 18px;
+  transition: color 0.3s ease-in;
 }
 
 .spacer {
