@@ -1,6 +1,13 @@
 import { Fragment, useEffect, useState, useRef, useMemo } from "react";
 import creatures from "@Data";
-import { cleanData, getAllRandomColors, forwardView, debounce } from "@Helpers";
+import {
+  cleanData,
+  getAllRandomColors,
+  debounce,
+  resize,
+  filterCreaturesBySearch,
+  getInViewElements,
+} from "@Helpers";
 import { ChartData } from "chart.js";
 import {
   RadarChart,
@@ -17,22 +24,36 @@ import { useMap } from "@Hooks";
 
 console.log("START");
 
-const LIMITER = 5000;
+const LIMITER = creatures.data.length; // LIMITER NEVER CHANGES => 3285 creatures
 
 const App = () => {
   console.time("App");
+
+  // STATES
+  //--
+
   const [scroll, setScroll] = useState(0);
   const [search, setSearch] = useState("");
 
-  const data = useMemo(() => {
-    return cleanData(creatures.data.slice(0, LIMITER));
-  }, [creatures.data, LIMITER]);
+  const data = useMemo(() => cleanData(creatures.data.slice(0, LIMITER)), []);
+  const colors = useMemo(() => getAllRandomColors(LIMITER), []);
 
-  console.time("colors");
-  const [colors] = useState(getAllRandomColors(LIMITER));
-  console.timeEnd("colors");
-  const listRef = useRef<HTMLLIElement | null>(null);
+  const listRef = useRef<HTMLLIElement[] | null>(null);
   const { map, toggle } = useMap(["openRadar", "openStats"], [LIMITER, LIMITER]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // HANDLERS
+  //--
+
+  const handleRefs = (i: number) => (el: HTMLLIElement | null) => {
+    if (!listRef.current) listRef.current = [];
+    if (!el) return;
+    listRef.current[i] = el;
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(e.currentTarget.value);
@@ -42,20 +63,14 @@ const App = () => {
     setScroll(window.scrollY);
   }, 100);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   // FILTERING BY SEARCH
-  const finalData = data.finalData.filter((creature) =>
-    creature.name.toLowerCase().includes(search)
-  );
+  const finalData = filterCreaturesBySearch(data, search, "name");
   // DEBOUNCING SEARCH
   const debouncedSearch = debounce(setSearch, 100);
   // UPDATING VIEW
-  const viewIndex = Math.floor((scroll * 1.15) / window.innerHeight);
-  const finalInViewElement = forwardView(finalData, viewIndex, 20);
+  const inViewCreatures = getInViewElements(finalData, scroll);
+  // UPDATING REFS IF NEEDED
+  listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
 
   console.timeEnd("App");
 
@@ -64,13 +79,13 @@ const App = () => {
       <SearchInput handleSearch={handleSearch} search={search} />
       <ul>
         {/* LOOP */}
-        {finalInViewElement.map((creature, i) => {
+        {inViewCreatures.map((creature, i) => {
           const newData = Object.entries(creature);
           const name = newData[0][1]; // value
           const rest = newData.slice(1);
           return (
-            <ListElement key={i}>
-              <span ref={listRef} id="ref" />
+            <ListElement key={name}>
+              <span ref={handleRefs(i)} id="ref" />
               <NameButtons
                 name={name}
                 color={colors[i]}
