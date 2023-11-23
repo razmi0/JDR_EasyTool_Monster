@@ -23,7 +23,7 @@ export {
   debounce,
   empty,
   getAllRandomColors,
-  getElementsAroundIndex,
+  forwardView,
   getGenericStats,
   getRandomColor,
   isDevEnv,
