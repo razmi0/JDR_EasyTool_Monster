@@ -10,7 +10,6 @@ import {
   ChartOptions,
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
-import { getRandomColor } from "./helpers";
 import { ChartTitle } from "./Containers";
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
@@ -96,13 +95,13 @@ const options: ChartOptions<"radar"> = {
   },
 };
 
-export function RadarChart({ data }: { data: ChartData<"radar"> }) {
+export function RadarChart({ data, color }: { data: ChartData<"radar">; color: string }) {
   //labels =>
   const finalData = {
     ...data,
     datasets: data.datasets.map((dataset) => ({
       ...dataset,
-      backgroundColor: getRandomColor(),
+      backgroundColor: color,
     })),
   };
 
