@@ -1,6 +1,9 @@
 import { ChartKeys, DataType, OptionalAllDataType } from "@/types";
 import { ChartData } from "chart.js";
 
+const VIEWLIMITER = 20;
+const SCREEN_HEIGHT = window.innerHeight;
+const SCROLL_FACTOR = 1.15; // intrinsicly linked to LisElement height
 export const show = <T>(data: T, label: string) => {
   console.log(label, data);
 };
@@ -139,6 +142,33 @@ export const cleanData = (data: DataType[]) => {
 
 export function forwardView<T>(finalData: T[], viewIndex: number, span: number) {
   const endIndex = Math.min(finalData.length - 1, viewIndex + span);
-
   return finalData.slice(0, endIndex + 1);
 }
+
+export const resize = <T>(arr: T[], length: number, defaultValue = 0 as unknown as T): T[] => {
+  if (arr.length === length) return arr;
+  if (arr.length > length) arr.splice(0, length);
+  if (arr.length < length) {
+    while (arr.length < length) arr.push(defaultValue);
+  }
+  return arr;
+};
+
+type HasFinalData = {
+  finalData: Record<string, string>[];
+};
+
+export const filterCreaturesBySearch = (data: HasFinalData, search: string, key: string) => {
+  const finalData = data.finalData.filter((creature) =>
+    creature[key].toLowerCase().includes(search.toLowerCase())
+  );
+
+  return finalData;
+};
+
+export const getInViewElements = (finalData: Record<string, string>[], scroll: number) => {
+  const viewIndex = Math.floor((scroll * SCROLL_FACTOR) / SCREEN_HEIGHT);
+  const clampedViewIndex = Math.max(0, Math.min(viewIndex, finalData.length - 1));
+  const inViewElements = forwardView(finalData, clampedViewIndex, VIEWLIMITER);
+  return inViewElements;
+};
