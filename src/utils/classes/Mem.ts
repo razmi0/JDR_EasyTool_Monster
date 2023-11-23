@@ -13,8 +13,8 @@ class Mem {
     if (this.value <= 0 || this.unit === targetUnit) return this;
     // if (this.value < 1000 && this.value > 0) return this;
 
-    let indexed = this.#units.indexOf(this.unit);
-    let level = this.#factors[indexed];
+    const indexed = this.#units.indexOf(this.unit);
+    const level = this.#factors[indexed];
     if (level === undefined) throw new Error("Unit not found");
     if (level !== 1) {
       for (let i = 0; i < this.#factors.length; i++) {
@@ -22,15 +22,15 @@ class Mem {
       }
     }
     if (targetUnit) {
-      let targetIndex = this.#units.indexOf(targetUnit);
-      let targetLevel = this.#factors[targetIndex];
+      const targetIndex = this.#units.indexOf(targetUnit);
+      const targetLevel = this.#factors[targetIndex];
       if (targetLevel === undefined) throw new Error("Target unit not found");
       this.value /= targetLevel;
       this.value = +this.value;
       this.unit = targetUnit;
       return this;
     }
-    let holdSum: number = this.value;
+    const holdSum: number = this.value;
     for (let i = 0; i < this.#factors.length; i++) {
       this.value /= this.#factors[i];
       if (this.value < 1000 && this.value > 0) {

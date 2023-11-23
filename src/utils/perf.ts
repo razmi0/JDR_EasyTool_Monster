@@ -1,6 +1,6 @@
-import Time from "./Time.js";
-import Mem from "./Mem.js";
-import Trash from "./Trash.js";
+import Time from "./classes/Time.js";
+import Mem from "./classes/Mem.js";
+import Trash from "./classes/Trash.js";
 
 // TODO : add description param to perfAsync
 

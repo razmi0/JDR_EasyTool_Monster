@@ -1,12 +1,8 @@
 class Trash {
-  public value: unknown | Record<string, unknown> | (string & {});
+  public value: unknown | Record<string, unknown> | string;
   public dressed: string | null = null;
   private isObject(): this is { value: Record<string, unknown> } {
-    return (
-      typeof this.value === "object" &&
-      this.value !== null &&
-      !Array.isArray(this.value)
-    );
+    return typeof this.value === "object" && this.value !== null && !Array.isArray(this.value);
   }
   dress(): unknown {
     if (this.isObject()) {
