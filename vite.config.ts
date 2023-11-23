@@ -12,6 +12,7 @@ export default defineConfig({
       "@Data": path.resolve(__dirname, "./src/raw_data.json"),
       "@Components": path.resolve(__dirname, "./src/components"),
       "@Helpers": path.resolve(__dirname, "./src/helpers"),
+      "@Hooks": path.resolve(__dirname, "./src/hooks"),
     },
   },
 });
