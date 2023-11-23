@@ -21,7 +21,9 @@
     "allowUmdGlobalAccess": true,
     "paths": {
       "@/*": ["src/*"],
-      "@Data": ["src/raw_data.json"]
+      "@Data": ["src/raw_data.json"],
+      "@Components/*": ["src/components/index.ts"],
+      "@Helpers/*": ["src/helpers/index.ts"]
     }
   },
   "include": ["src"],
