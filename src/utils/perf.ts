@@ -1,4 +1,3 @@
-import { memoryUsage } from "node:process";
 import Time from "./Time.js";
 import Mem from "./Mem.js";
 import Trash from "./Trash.js";
@@ -43,7 +42,6 @@ export const perfAsync = async <T>(
     const [times, heaps, { stats_time, stats_mem }] = init();
 
     // test
-    for (let i = 0; i < cap; i++) trash.pick(memTest(fn, args, heaps.stock, trash));
     for (let i = 0; i < cap; i++) trash.pick(speedTest(fn, args, times.stock, trash));
 
     // stats
@@ -80,7 +78,6 @@ export const perfSync = <T>(
   const [times, heaps, { stats_time, stats_mem }] = init();
 
   // test
-  for (let i = 0; i < cap; i++) trash.pick(memTest(fn, args, heaps.stock, trash));
   for (let i = 0; i < cap; i++) trash.pick(speedTest(fn, args, times.stock, trash));
 
   // stats
@@ -134,19 +131,6 @@ function speedTest<T extends unknown | unknown[]>(
   trash = fn(...args);
   const end_time = performance.now();
   stock.push(end_time - start_time);
-  return trash;
-}
-
-function memTest<T extends unknown | unknown[]>(
-  fn: (...args: T[]) => unknown,
-  args: T[],
-  stock: number[],
-  trash: unknown
-) {
-  const start_mem_xp = memoryUsage().rss;
-  trash = fn(...args);
-  const end_mem_xp = memoryUsage().rss;
-  stock.push(end_mem_xp - start_mem_xp);
   return trash;
 }
 
