@@ -1,6 +1,6 @@
-import { Fragment, useEffect, useState, useRef } from "react";
+import { Fragment, useEffect, useState, useRef, useMemo } from "react";
 import creatures from "@Data";
-import { cleanData, getAllRandomColors, getElementsAroundIndex, debounce } from "@Helpers";
+import { cleanData, getAllRandomColors, forwardView, debounce } from "@Helpers";
 import { ChartData } from "chart.js";
 import {
   RadarChart,
@@ -13,48 +13,30 @@ import {
   Stats,
   SearchInput,
 } from "@Components";
+import { useMap } from "@Hooks";
 
 console.log("START");
 
-const LIMITER = 50;
-const boolArr = new Array(LIMITER).fill(false);
+const LIMITER = 5000;
 
 const App = () => {
   console.time("App");
   const [scroll, setScroll] = useState(0);
-
   const [search, setSearch] = useState("");
-  const [data] = useState(cleanData(creatures.data.slice(0, LIMITER)));
+
+  const data = useMemo(() => {
+    return cleanData(creatures.data.slice(0, LIMITER));
+  }, [creatures.data, LIMITER]);
+
+  console.time("colors");
   const [colors] = useState(getAllRandomColors(LIMITER));
-  const [openRadar, setOpenRadar] = useState(boolArr);
-  const [openStats, setOpenStats] = useState(boolArr);
+  console.timeEnd("colors");
   const listRef = useRef<HTMLLIElement | null>(null);
-
-  const handleOpenRadar = (i: number) => {
-    setOpenRadar((prev) => {
-      const newArr = [...prev];
-      newArr[i] = !newArr[i];
-      return newArr;
-    });
-  };
-
-  const handleOpenStats = (i: number) => {
-    setOpenStats((prev) => {
-      const newArr = [...prev];
-      newArr[i] = !newArr[i];
-      return newArr;
-    });
-  };
-
-  const debouncedSearch = debounce(setSearch, 100);
+  const { map, toggle } = useMap(["openRadar", "openStats"], [LIMITER, LIMITER]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     debouncedSearch(e.currentTarget.value);
   };
-
-  const finalData = data.finalData.filter((creature) =>
-    creature.name.toLowerCase().includes(search)
-  );
 
   const handleScroll = debounce(() => {
     setScroll(window.scrollY);
@@ -65,9 +47,15 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // FILTERING BY SEARCH
+  const finalData = data.finalData.filter((creature) =>
+    creature.name.toLowerCase().includes(search)
+  );
+  // DEBOUNCING SEARCH
+  const debouncedSearch = debounce(setSearch, 100);
+  // UPDATING VIEW
   const viewIndex = Math.floor((scroll * 1.15) / window.innerHeight);
-  const finalInViewElement = getElementsAroundIndex(finalData, viewIndex, 10);
-  console.log(listRef.current);
+  const finalInViewElement = forwardView(finalData, viewIndex, 20);
 
   console.timeEnd("App");
 
@@ -86,8 +74,8 @@ const App = () => {
               <NameButtons
                 name={name}
                 color={colors[i]}
-                handleOpenRadar={() => handleOpenRadar(i)}
-                handleOpenStats={() => handleOpenStats(i)}
+                handleOpenRadar={() => toggle(i, "openRadar")}
+                handleOpenStats={() => toggle(i, "openStats")}
               >
                 <>Reveal stats</>
                 <>Reveal radar</>
@@ -102,13 +90,13 @@ const App = () => {
                         label={label}
                         value={value}
                         key={label}
-                        open={openStats[i]}
+                        open={map.openStats[i]}
                         color={colors[i]}
                       />
                     );
                   })}
                 </StatsContainer>
-                <ChartContainer isOpen={openRadar[i]}>
+                <ChartContainer isOpen={map.openRadar[i]}>
                   <RadarChart data={data.finalChart[i] as ChartData<"radar">} color={colors[i]} />
                 </ChartContainer>
               </StatsAndChart>
@@ -116,7 +104,6 @@ const App = () => {
           );
         })}
       </ul>
-      {/* <BouncingBalls /> */}
       <Anchor />
     </>
   );
