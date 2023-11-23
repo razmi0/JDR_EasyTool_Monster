@@ -104,6 +104,8 @@ export const cleanData = (data: DataType[]) => {
   let chartData = [];
   const finalChart = [];
 
+  console.time("cleanData");
+
   for (let i = 0; i < data.length; i++) {
     for (let [key, value] of Object.entries(data[i])) {
       key = beautifyK(key) as keyof OptionalAllDataType;
@@ -127,6 +129,7 @@ export const cleanData = (data: DataType[]) => {
     labels = [];
     chartData = [];
   }
+  console.timeEnd("cleanData");
 
   return {
     finalData,
@@ -134,9 +137,8 @@ export const cleanData = (data: DataType[]) => {
   };
 };
 
-export function getElementsAroundIndex<T>(finalData: T[], viewIndex: number, around: number) {
-  const startIndex = Math.max(0, viewIndex - around);
-  const endIndex = Math.min(finalData.length - 1, viewIndex + around);
+export function forwardView<T>(finalData: T[], viewIndex: number, span: number) {
+  const endIndex = Math.min(finalData.length - 1, viewIndex + span);
 
-  return finalData.slice(startIndex, endIndex + 1);
+  return finalData.slice(0, endIndex + 1);
 }
