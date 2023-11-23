@@ -15,15 +15,24 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   width: 100%;
+  text-align: left;
+}
+
+a {
+  all: unset;
+  cursor: pointer;
+  color: #242424;
+  font-weight: bold;
 }
 
 body {
   margin: 0;
   display: flex;
   min-width: 320px;
-  min-height: 100vh;
+  box-sizing: border-box;
+  /* min-height: 100vh; */
+  flex-direction: column;
 }
 
 h1 {
@@ -40,13 +49,29 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  /* transition: border-color 0.25s; */
   color: #fff;
 }
-button:hover {
+/* button:hover {
   border-color: #646cff;
-}
+} */
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none;
 }
+
+/* #canvas {
+  position: absolute;
+  transform: translate(30%, 30%);
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.5;
+  background-color: #ccddcc;
+  margin: 1em auto;
+} */
+/* .ball {
+  background-color: black;
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+} */
