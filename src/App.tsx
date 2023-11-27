@@ -22,6 +22,7 @@ import {
   Title,
 } from "@Components";
 import { useMap } from "@Hooks";
+import { expCsv } from "./helpers/helpers";
 
 console.log("START");
 
@@ -76,6 +77,12 @@ const App = () => {
 
   return (
     <>
+      <button
+        style={{ position: "absolute", margin: "3rem" }}
+        onClick={() => expCsv(data.finalData)}
+      >
+        Export as CSV
+      </button>
       <Title as={"h1"}>Mythical Creatures</Title>
       <SearchInput handleSearch={handleSearch} searchedSize={filteredData.finalData.length} />
       <ul style={{ all: "unset" }}>

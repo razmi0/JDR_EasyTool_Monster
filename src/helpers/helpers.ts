@@ -188,10 +188,36 @@ export const filterCreaturesBySearch = (
 
 export const getInViewCreatures = (data: FinalDataType, scroll: number, unFolded: number) => {
   const finalViewLimiter = Math.max(20, VIEW_LIMITER - unFolded * FOLDED_VIEW_CONVERTER);
-  console.log("finalViewLimiter", finalViewLimiter);
   const viewIndex = Math.floor((scroll * SCROLL_FACTOR) / SCREEN_HEIGHT);
   const clampedViewIndex = Math.max(0, Math.min(viewIndex, data.finalData.length - 1));
   const inViewCreatures = forwardView(data.finalData, clampedViewIndex, finalViewLimiter);
   const inViewCharts = forwardView(data.finalChart, clampedViewIndex, finalViewLimiter);
   return { inViewCharts, inViewCreatures };
 };
+
+export const expCsv = (data: Record<string, string>[]) => {
+  console.log(data);
+  const csvContent =
+    Object.keys(data[0])
+      .map((lbl) => lbl.charAt(0).toUpperCase() + lbl.slice(1))
+      .join(",") +
+    "\n" +
+    data
+      .map((e) =>
+        Object.values(e)
+          .map((val) => val.replace(/,/g, " "))
+          .join(",")
+      )
+      .join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", "data.csv");
+  link.style.visibility = "hidden";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+//
