@@ -19,6 +19,7 @@ import {
   Anchor,
   Stats,
   SearchInput,
+  Title,
 } from "@Components";
 import { useMap } from "@Hooks";
 
@@ -39,7 +40,10 @@ const App = () => {
   const colors = useMemo(() => getAllRandomColors(LIMITER), [LIMITER]);
 
   const listRef = useRef<HTMLLIElement[] | null>(null);
-  const { map, toggle } = useMap(["openRadar", "openStats"], [LIMITER, LIMITER]);
+  const { map, toggle } = useMap(
+    ["openRadar", "openStats", "seeCreature"],
+    [LIMITER, LIMITER, LIMITER]
+  );
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -64,14 +68,18 @@ const App = () => {
   }, 100);
 
   const debouncedSearch = debounce(setSearch, 300);
+
   const filteredData = filterCreaturesBySearch(data, search, "name");
-  const { inViewCharts, inViewCreatures } = getInViewCreatures(filteredData, scroll);
+  const unFoldedCount = filteredData.finalData.filter((_, i) => map.seeCreature[i]).length;
+  const { inViewCharts, inViewCreatures } = getInViewCreatures(filteredData, scroll, unFoldedCount);
   listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
 
   console.timeEnd("App");
+
   return (
     <>
-      <SearchInput handleSearch={handleSearch} search={search} />
+      <Title as={"h1"}>Mythical Creatures</Title>
+      <SearchInput handleSearch={handleSearch} searchedSize={filteredData.finalData.length} />
       <ul>
         {/* LOOP */}
         {inViewCreatures.map((creature, i) => {
@@ -89,30 +97,34 @@ const App = () => {
                 color={colors[i]}
                 handleOpenRadar={() => toggle(i, "openRadar")}
                 handleOpenStats={() => toggle(i, "openStats")}
+                handleSeeCreature={() => toggle(i, "seeCreature")}
               >
                 <>Reveal stats</>
                 <>Reveal radar</>
+                <>Fold</>
               </NameButtons>
-              <StatsAndChart>
-                <StatsContainer>
-                  {rest.map(([label, value]) => {
-                    return value === "" || inViewCharts[i].labels.includes(label) ? (
-                      <Fragment key={label} />
-                    ) : (
-                      <Stats
-                        label={label}
-                        value={value}
-                        key={label}
-                        open={map.openStats[i]}
-                        color={colors[i]}
-                      />
-                    );
-                  })}
-                </StatsContainer>
-                <ChartContainer isOpen={map.openRadar[i]}>
-                  <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
-                </ChartContainer>
-              </StatsAndChart>
+              {map.seeCreature[i] && (
+                <StatsAndChart>
+                  <StatsContainer>
+                    {rest.map(([label, value]) => {
+                      return value === "" || inViewCharts[i].labels.includes(label) ? (
+                        <Fragment key={label} />
+                      ) : (
+                        <Stats
+                          label={label}
+                          value={value}
+                          key={label}
+                          open={map.openStats[i]}
+                          color={colors[i]}
+                        />
+                      );
+                    })}
+                  </StatsContainer>
+                  <ChartContainer isOpen={map.openRadar[i]}>
+                    <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
+                  </ChartContainer>
+                </StatsAndChart>
+              )}
             </ListElement>
           );
         })}

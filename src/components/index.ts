@@ -8,6 +8,7 @@ export {
   NameButtons,
   StatsAndChart,
   StatsContainer,
+  Title,
 } from "./Containers";
 export { SearchInput } from "./SearchInput";
 export { Stats } from "./Stats";

@@ -1,19 +1,11 @@
 import styles from "./_.module.css";
 type InputProps = {
-  search: string;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  searchedSize: number;
 };
-export const SearchInput = ({ handleSearch }: InputProps) => {
+export const SearchInput = ({ handleSearch, searchedSize }: InputProps) => {
   return (
     <>
-      <h1
-        style={{
-          width: "100%",
-          textAlign: "center",
-        }}
-      >
-        Mythical Creatures
-      </h1>
       <div
         style={{
           textAlign: "center",
@@ -28,6 +20,7 @@ export const SearchInput = ({ handleSearch }: InputProps) => {
             onChange={(e) => handleSearch(e)}
             className={styles["input-element"]}
           />
+          <small style={{ marginLeft: "5px" }}>{searchedSize}</small>
         </div>
       </div>
     </>

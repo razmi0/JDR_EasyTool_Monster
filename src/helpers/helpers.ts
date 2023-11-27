@@ -1,9 +1,10 @@
 import { ChartKeys, DataType, OptionalAllDataType } from "@/types";
 import { ChartData } from "chart.js";
 
-const VIEWLIMITER = 20 as const;
+const VIEW_LIMITER = 100 as const;
+const FOLDED_VIEW_CONVERTER = 5 as const;
 const SCREEN_HEIGHT = window.innerHeight;
-const SCROLL_FACTOR = 1.15 as const; // intrinsicly linked to LisElement height
+const SCROLL_FACTOR = 5 as const; // intrinsicly linked to LisElement height
 export const show = <T>(data: T, label: string) => {
   console.log(label, data);
 };
@@ -185,10 +186,12 @@ export const filterCreaturesBySearch = (
   return { finalData, finalChart };
 };
 
-export const getInViewCreatures = (data: FinalDataType, scroll: number) => {
+export const getInViewCreatures = (data: FinalDataType, scroll: number, unFolded: number) => {
+  const finalViewLimiter = Math.max(20, VIEW_LIMITER - unFolded * FOLDED_VIEW_CONVERTER);
+  console.log("finalViewLimiter", finalViewLimiter);
   const viewIndex = Math.floor((scroll * SCROLL_FACTOR) / SCREEN_HEIGHT);
   const clampedViewIndex = Math.max(0, Math.min(viewIndex, data.finalData.length - 1));
-  const inViewCreatures = forwardView(data.finalData, clampedViewIndex, VIEWLIMITER);
-  const inViewCharts = forwardView(data.finalChart, clampedViewIndex, VIEWLIMITER);
+  const inViewCreatures = forwardView(data.finalData, clampedViewIndex, finalViewLimiter);
+  const inViewCharts = forwardView(data.finalChart, clampedViewIndex, finalViewLimiter);
   return { inViewCharts, inViewCreatures };
 };

@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode, forwardRef, useId } from "react";
+import { ElementType, HTMLAttributes, ReactNode, forwardRef, useId } from "react";
 import styles from "./_.module.css";
 import { scrollToTop } from "../helpers/helpers";
 import { Fire } from "@/components/icons/Icons";
@@ -18,6 +18,7 @@ interface NameProps {
   color: string;
   handleOpenRadar: () => void;
   handleOpenStats: () => void;
+  handleSeeCreature: () => void;
   children: ReactNode[];
 }
 export const NameButtons = ({
@@ -25,6 +26,7 @@ export const NameButtons = ({
   color,
   handleOpenRadar,
   handleOpenStats,
+  handleSeeCreature,
   children,
 }: NameProps) => {
   const id = useId().replace(/:/g, "_") + "_button";
@@ -59,9 +61,19 @@ export const NameButtons = ({
         >
           {children[1]}
         </button>
+        <button className={styles["button-style"] + " " + id} onClick={handleSeeCreature}>
+          {children[2]}
+        </button>
       </div>
     </div>
   );
+};
+
+interface TitleProps extends Container {
+  as?: (ElementType & "h1") | "h2" | "h3" | "h4" | "h5" | "h6";
+}
+export const Title = ({ children, as: Element = "h1" }: TitleProps) => {
+  return <Element style={{ width: "100%", textAlign: "center" }}>{children}</Element>;
 };
 
 // button {
