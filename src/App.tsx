@@ -23,6 +23,7 @@ import {
 } from "@Components";
 import { useMap } from "@Hooks";
 import { expCsv } from "./helpers/helpers";
+import { IFrame } from "./components/IFrame";
 
 console.log("START");
 
@@ -125,9 +126,18 @@ const App = () => {
                       );
                     })}
                   </StatsContainer>
-                  <ChartContainer isOpen={map.openRadar[i]}>
-                    <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
-                  </ChartContainer>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "100%",
+                    }}
+                  >
+                    <ChartContainer isOpen={map.openRadar[i]}>
+                      <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
+                    </ChartContainer>
+                    <IFrame name={name} />
+                  </div>
                 </StatsAndChart>
               )}
             </ListElement>

@@ -34,7 +34,8 @@ li {
 }
 .statsAndChart-ctn {
   display: flex;
-  justify-content: flex-start;
+  /* justify-content: space-between; */
+  gap: 15px;
 }
 .chart-global-ctn {
   display: grid;
@@ -47,7 +48,7 @@ li {
 }
 
 .chart-size {
-  height: 500px;
+  height: fit-content;
   width: 500px;
 }
 

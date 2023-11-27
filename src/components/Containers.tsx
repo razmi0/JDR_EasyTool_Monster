@@ -35,13 +35,11 @@ export const NameButtons = ({
     <div id="name" className={styles["name-ctn"] + " " + id}>
       <style>
         {`
-
               .${id}:hover {
                 border-color: ${color};
                 color: ${color};
                 transition : 0.3s ease-in;
               }
-              
       `}
       </style>
       <div style={{ display: "flex", placeItems: "center" }}>
