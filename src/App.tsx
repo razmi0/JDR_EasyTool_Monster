@@ -80,7 +80,7 @@ const App = () => {
     <>
       <Title as={"h1"}>Mythical Creatures</Title>
       <SearchInput handleSearch={handleSearch} searchedSize={filteredData.finalData.length} />
-      <ul>
+      <ul style={{ all: "unset" }}>
         {/* LOOP */}
         {inViewCreatures.map((creature, i) => {
           const newData = Object.entries(creature);
