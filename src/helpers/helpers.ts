@@ -112,7 +112,9 @@ export const cleanData = (data: DataType[]) => {
 
   for (let i = 0; i < data.length; i++) {
     if (data[i].name === "") continue;
-    if (nameSet.has(data[i].name)) continue;
+    if (nameSet.has(data[i].name)) {
+      continue;
+    }
     nameSet.add(data[i].name);
     for (let [key, value] of Object.entries(data[i])) {
       key = beautifyK(key) as keyof OptionalAllDataType;
@@ -163,10 +165,14 @@ type FinalDataType = {
   finalChart: { labels: (string | number)[]; datasets: { data: (string | number)[] }[] }[];
   //  { labels: (string | number)[]; datasets: { data: (string | number)[] }[] }[] }
 };
-export const filterCreaturesBySearch = (data: FinalDataType, search: string, key: string) => {
+export const filterCreaturesBySearch = (
+  data: FinalDataType,
+  search: string,
+  key: string
+): FinalDataType => {
   if (search.length === 0) return data;
   const arr: number[] = [];
-  const dataSearched = data.finalData.filter((creature, i) => {
+  const finalData = data.finalData.filter((creature, i) => {
     const isSearched = creature[key].toLowerCase().includes(search.toLowerCase());
     if (isSearched && !arr.includes(i)) {
       arr.push(i);
@@ -174,11 +180,9 @@ export const filterCreaturesBySearch = (data: FinalDataType, search: string, key
     return isSearched;
   });
 
-  console.log(arr);
+  const finalChart = data.finalChart.filter((_, i) => arr.includes(i));
 
-  const chartSearched = data.finalChart.filter((_, i) => arr.includes(i));
-
-  return { dataSearched, chartSearched };
+  return { finalData, finalChart };
 };
 
 export const getInViewCreatures = (data: FinalDataType, scroll: number) => {

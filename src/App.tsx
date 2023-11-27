@@ -56,16 +56,16 @@ const App = () => {
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.currentTarget.value);
+    debouncedSearch(e.currentTarget.value);
   };
 
   const handleScroll = debounce(() => {
     setScroll(window.scrollY);
   }, 100);
 
-  // const debouncedSearch = debounce(setSearch, 100);
-  // const { dataSearched, chartSearched } = filterCreaturesBySearch(data, search, "name");
-  const { inViewCharts, inViewCreatures } = getInViewCreatures(data, scroll);
+  const debouncedSearch = debounce(setSearch, 300);
+  const filteredData = filterCreaturesBySearch(data, search, "name");
+  const { inViewCharts, inViewCreatures } = getInViewCreatures(filteredData, scroll);
   listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
 
   console.timeEnd("App");

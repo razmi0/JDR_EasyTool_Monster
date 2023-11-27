@@ -3,7 +3,7 @@ type InputProps = {
   search: string;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
-export const SearchInput = ({ search, handleSearch }: InputProps) => {
+export const SearchInput = ({ handleSearch }: InputProps) => {
   return (
     <>
       <h1
@@ -25,7 +25,6 @@ export const SearchInput = ({ search, handleSearch }: InputProps) => {
           <input
             type="text"
             placeholder="Search..."
-            value={search}
             onChange={(e) => handleSearch(e)}
             className={styles["input-element"]}
           />
