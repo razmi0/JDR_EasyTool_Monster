@@ -1,13 +1,17 @@
-import { ReactNode, useId } from "react";
+import { HTMLAttributes, ReactNode, forwardRef, useId } from "react";
 import styles from "./_.module.css";
 import { scrollToTop } from "../helpers/helpers";
 import { Fire } from "@/components/icons/Icons";
 
 type Container = { children: ReactNode };
-
-export const ListElement = ({ children }: Container) => {
-  return <li className={styles["listElementStyle"]}>{children}</li>;
-};
+interface ListProps extends HTMLAttributes<HTMLLIElement> {}
+export const ListElement = forwardRef<HTMLLIElement, ListProps>((props, ref) => {
+  return (
+    <li ref={ref} className={styles["listElementStyle"]} {...props}>
+      {props.children}
+    </li>
+  );
+});
 
 interface NameProps {
   name: string;
@@ -38,20 +42,24 @@ export const NameButtons = ({
               
       `}
       </style>
-      <Fire />
-      <span className={styles["name-style"]} style={{ color: color }}>
-        {name}
-      </span>
-      <button className={styles["button-style"] + " " + id} onClick={handleOpenStats}>
-        {children[0]}
-      </button>
-      <button
-        data-btn-color={id}
-        className={styles["button-style"] + " " + id}
-        onClick={handleOpenRadar}
-      >
-        {children[1]}
-      </button>
+      <div style={{ display: "flex", placeItems: "center" }}>
+        <Fire />
+        <span className={styles["name-style"]} style={{ color: color }}>
+          {name}
+        </span>
+      </div>
+      <div style={{ display: "flex", gap: "10px" }}>
+        <button className={styles["button-style"] + " " + id} onClick={handleOpenStats}>
+          {children[0]}
+        </button>
+        <button
+          data-btn-color={id}
+          className={styles["button-style"] + " " + id}
+          onClick={handleOpenRadar}
+        >
+          {children[1]}
+        </button>
+      </div>
     </div>
   );
 };

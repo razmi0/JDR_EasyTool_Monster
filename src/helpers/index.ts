@@ -24,7 +24,7 @@ export {
   empty,
   getAllRandomColors,
   filterCreaturesBySearch,
-  getInViewElements,
+  getInViewCreatures,
   resize,
   forwardView,
   getGenericStats,

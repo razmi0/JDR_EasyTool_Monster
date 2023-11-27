@@ -1,9 +1,9 @@
 import { ChartKeys, DataType, OptionalAllDataType } from "@/types";
 import { ChartData } from "chart.js";
 
-const VIEWLIMITER = 20;
+const VIEWLIMITER = 20 as const;
 const SCREEN_HEIGHT = window.innerHeight;
-const SCROLL_FACTOR = 1.15; // intrinsicly linked to LisElement height
+const SCROLL_FACTOR = 1.15 as const; // intrinsicly linked to LisElement height
 export const show = <T>(data: T, label: string) => {
   console.log(label, data);
 };
@@ -110,6 +110,7 @@ export const cleanData = (data: DataType[]) => {
   console.time("cleanData");
 
   for (let i = 0; i < data.length; i++) {
+    if (data[i].name === "") continue;
     for (let [key, value] of Object.entries(data[i])) {
       key = beautifyK(key) as keyof OptionalAllDataType;
       if (map.has(key)) {
@@ -140,9 +141,9 @@ export const cleanData = (data: DataType[]) => {
   };
 };
 
-export function forwardView<T>(finalData: T[], viewIndex: number, span: number) {
-  const endIndex = Math.min(finalData.length - 1, viewIndex + span);
-  return finalData.slice(0, endIndex + 1);
+export function forwardView<T>(data: T[], viewIndex: number, span: number) {
+  const endIndex = Math.min(data.length - 1, viewIndex + span);
+  return data.slice(0, endIndex + 1);
 }
 
 export const resize = <T>(arr: T[], length: number, defaultValue = 0 as unknown as T): T[] => {
@@ -154,21 +155,33 @@ export const resize = <T>(arr: T[], length: number, defaultValue = 0 as unknown 
   return arr;
 };
 
-type HasFinalData = {
+type FinalDataType = {
   finalData: Record<string, string>[];
+  finalChart: { labels: (string | number)[]; datasets: { data: (string | number)[] }[] }[];
+  //  { labels: (string | number)[]; datasets: { data: (string | number)[] }[] }[] }
+};
+export const filterCreaturesBySearch = (data: FinalDataType, search: string, key: string) => {
+  if (search.length === 0) return data;
+  const arr: number[] = [];
+  const dataSearched = data.finalData.filter((creature, i) => {
+    const isSearched = creature[key].toLowerCase().includes(search.toLowerCase());
+    if (isSearched && !arr.includes(i)) {
+      arr.push(i);
+    }
+    return isSearched;
+  });
+
+  console.log(arr);
+
+  const chartSearched = data.finalChart.filter((_, i) => arr.includes(i));
+
+  return { dataSearched, chartSearched };
 };
 
-export const filterCreaturesBySearch = (data: HasFinalData, search: string, key: string) => {
-  const finalData = data.finalData.filter((creature) =>
-    creature[key].toLowerCase().includes(search.toLowerCase())
-  );
-
-  return finalData;
-};
-
-export const getInViewElements = (finalData: Record<string, string>[], scroll: number) => {
+export const getInViewCreatures = (data: FinalDataType, scroll: number) => {
   const viewIndex = Math.floor((scroll * SCROLL_FACTOR) / SCREEN_HEIGHT);
-  const clampedViewIndex = Math.max(0, Math.min(viewIndex, finalData.length - 1));
-  const inViewElements = forwardView(finalData, clampedViewIndex, VIEWLIMITER);
-  return inViewElements;
+  const clampedViewIndex = Math.max(0, Math.min(viewIndex, data.finalData.length - 1));
+  const inViewCreatures = forwardView(data.finalData, clampedViewIndex, VIEWLIMITER);
+  const inViewCharts = forwardView(data.finalChart, clampedViewIndex, VIEWLIMITER);
+  return { inViewCharts, inViewCreatures };
 };

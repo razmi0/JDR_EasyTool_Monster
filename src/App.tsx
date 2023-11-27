@@ -6,7 +6,7 @@ import {
   debounce,
   resize,
   filterCreaturesBySearch,
-  getInViewElements,
+  getInViewCreatures,
 } from "@Helpers";
 import { ChartData } from "chart.js";
 import {
@@ -56,24 +56,19 @@ const App = () => {
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.currentTarget.value);
+    setSearch(e.currentTarget.value);
   };
 
   const handleScroll = debounce(() => {
     setScroll(window.scrollY);
   }, 100);
 
-  // FILTERING BY SEARCH
-  const finalData = filterCreaturesBySearch(data, search, "name");
-  // DEBOUNCING SEARCH
-  const debouncedSearch = debounce(setSearch, 100);
-  // UPDATING VIEW
-  const inViewCreatures = getInViewElements(finalData, scroll);
-  // UPDATING REFS IF NEEDED
+  // const debouncedSearch = debounce(setSearch, 100);
+  // const { dataSearched, chartSearched } = filterCreaturesBySearch(data, search, "name");
+  const { inViewCharts, inViewCreatures } = getInViewCreatures(data, scroll);
   listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
 
   console.timeEnd("App");
-
   return (
     <>
       <SearchInput handleSearch={handleSearch} search={search} />
@@ -84,8 +79,11 @@ const App = () => {
           const name = newData[0][1]; // value
           const rest = newData.slice(1);
           return (
-            <ListElement key={name}>
-              <span ref={handleRefs(i)} id="ref" />
+            <ListElement
+              key={name}
+              ref={handleRefs(i)}
+              id={`ref_${i}_${name.toLowerCase().replace(/\s/g, "")}`}
+            >
               <NameButtons
                 name={name}
                 color={colors[i]}
@@ -98,7 +96,7 @@ const App = () => {
               <StatsAndChart>
                 <StatsContainer>
                   {rest.map(([label, value]) => {
-                    return value === "" || data.finalChart[i].labels.includes(label) ? (
+                    return value === "" || inViewCharts[i].labels.includes(label) ? (
                       <Fragment key={label} />
                     ) : (
                       <Stats
@@ -112,7 +110,7 @@ const App = () => {
                   })}
                 </StatsContainer>
                 <ChartContainer isOpen={map.openRadar[i]}>
-                  <RadarChart data={data.finalChart[i] as ChartData<"radar">} color={colors[i]} />
+                  <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
                 </ChartContainer>
               </StatsAndChart>
             </ListElement>
