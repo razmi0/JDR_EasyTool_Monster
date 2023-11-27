@@ -36,8 +36,8 @@ const options: ChartOptions<"radar"> = {
   elements: {
     point: {
       hitRadius: 30,
-      hoverRadius: 8,
-      radius: 4,
+      hoverRadius: 4,
+      radius: 2,
     },
   },
   responsive: true,
@@ -95,20 +95,53 @@ const options: ChartOptions<"radar"> = {
   },
 };
 
+const group1 = ["perception", "ac", "fort", "will", "ref", "stealth", "acrobatics"];
+const group2 = ["constitution", "wisdom", "dexterity", "strength", "charisma", "intelligence"];
 export function RadarChart({ data, color }: { data: ChartData<"radar">; color: string }) {
+  const groupIndexes = data.labels?.reduce(
+    (acc: number[][], label, i) => {
+      if (group1.includes(label as string)) {
+        acc[0].push(i);
+      } else if (group2.includes(label as string)) {
+        acc[1].push(i);
+      }
+      return acc;
+    },
+    [[], []] as number[][]
+  ) as number[][];
+
+  const groupLabels1 = groupIndexes[0].map((i) => data.labels?.[i]);
+  const groupLabels2 = groupIndexes[1].map((i) => data.labels?.[i]);
+  const groupData1 = groupIndexes[0].map((i) => data.datasets?.[0].data?.[i]);
+  const groupData2 = groupIndexes[1].map((i) => data.datasets?.[0].data?.[i]);
   //labels =>
-  const finalData = {
-    ...data,
-    datasets: data.datasets.map((dataset) => ({
-      ...dataset,
-      backgroundColor: color,
-    })),
+  const finalData1 = {
+    labels: groupLabels1,
+    datasets: [
+      {
+        data: groupData1,
+        backgroundColor: color,
+      },
+    ],
+  };
+
+  const finalData2 = {
+    labels: groupLabels2,
+    datasets: [
+      {
+        data: groupData2,
+        backgroundColor: color,
+      },
+    ],
   };
 
   return (
     <>
       <ChartTitle>General Stats</ChartTitle>
-      <Radar data={finalData} options={options} />
+      <div style={{ display: "flex", maxHeight: "200px" }}>
+        <Radar data={finalData1} options={options} />
+        <Radar data={finalData2} options={options} />
+      </div>
     </>
   );
 }

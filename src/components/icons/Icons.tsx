@@ -3,7 +3,7 @@ interface IconProps {
   size?: string | number | string[] | number[];
 }
 
-export const Fire = ({ color, size = "50px" }: IconProps) => {
+export const Fire = ({ size = "50px" }: IconProps) => {
   const cls = {
     cls3: "url(#linear-gradient-1)",
     cls4: "#fc9502",
