@@ -24,7 +24,7 @@ import { useMap } from "@Hooks";
 
 console.log("START");
 
-const LIMITER = creatures.data.length; // LIMITER NEVER CHANGES => 3285 creatures
+const LIMITER = 2194 as const; // LIMITER NEVER CHANGES => 2194 creatures
 
 const App = () => {
   console.time("App");
@@ -35,8 +35,8 @@ const App = () => {
   const [scroll, setScroll] = useState(0);
   const [search, setSearch] = useState("");
 
-  const data = useMemo(() => cleanData(creatures.data.slice(0, LIMITER)), []);
-  const colors = useMemo(() => getAllRandomColors(LIMITER), []);
+  const data = useMemo(() => cleanData(creatures.data.slice(0, LIMITER)), [LIMITER]);
+  const colors = useMemo(() => getAllRandomColors(LIMITER), [LIMITER]);
 
   const listRef = useRef<HTMLLIElement[] | null>(null);
   const { map, toggle } = useMap(["openRadar", "openStats"], [LIMITER, LIMITER]);
@@ -125,22 +125,22 @@ const App = () => {
 export default App;
 
 // SORTED BY MOST OCCURRING
-// ['perception', 2288]
+// ['perception', 2288] // OOOOOOO
 // ['hp', 2288]
-// ['ac', 2288]
-// ['fort', 2288]
-// ['will', 2288]
-// ['ref', 2287]
-// ['constitution', 2280]
-// ['wisdom', 2248]
+// ['ac', 2288] // OOOOOOO
+// ['fort', 2288] // OOOOOOO
+// ['will', 2288] // OOOOOOO
+// ['ref', 2287] // OOOOOOO
+// ['constitution', 2280] // ooooooo
+// ['wisdom', 2248] // ooooooo
 // ['creaturelevel', 2199]
-// ['dexterity', 2193]
-// ['strength', 2125]
-// ['charisma', 1809]
+// ['dexterity', 2193] // ooooo
+// ['strength', 2125] // oooooo
+// ['charisma', 1809] // ooooo
 // ['athletics', 1622]
-// ['stealth', 1426]
-// ['intelligence', 1406]
-// ['acrobatics', 1283]
+// ['stealth', 1426] // OOOOOO
+// ['intelligence', 1406] // ooooo
+// ['acrobatics', 1283] // OOOOO
 // ['intimidation', 891]
 // ['deception', 661]
 // ['survival', 582]
