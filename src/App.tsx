@@ -28,8 +28,6 @@ console.log("START");
 const LIMITER = 2194 as const; // LIMITER NEVER CHANGES => 2194 creatures
 
 const App = () => {
-  console.time("App");
-
   // STATES
   //--
 
@@ -67,14 +65,14 @@ const App = () => {
     setScroll(window.scrollY);
   }, 100);
 
+  // FILTERING
+  //--
   const debouncedSearch = debounce(setSearch, 300);
 
   const filteredData = filterCreaturesBySearch(data, search, "name");
   const unFoldedCount = filteredData.finalData.filter((_, i) => map.seeCreature[i]).length;
   const { inViewCharts, inViewCreatures } = getInViewCreatures(filteredData, scroll, unFoldedCount);
   listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
-
-  console.timeEnd("App");
 
   return (
     <>
