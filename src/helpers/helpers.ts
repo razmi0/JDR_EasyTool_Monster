@@ -103,6 +103,7 @@ export const cleanData = (data: DataType[]) => {
   const map: Map<string, string> = new Map();
   let cleanedData: Record<string, string> = {};
   const finalData: Record<string, string>[] = [];
+  const nameSet: Set<string> = new Set();
   let labels = [];
   let chartData = [];
   const finalChart = [];
@@ -111,6 +112,8 @@ export const cleanData = (data: DataType[]) => {
 
   for (let i = 0; i < data.length; i++) {
     if (data[i].name === "") continue;
+    if (nameSet.has(data[i].name)) continue;
+    nameSet.add(data[i].name);
     for (let [key, value] of Object.entries(data[i])) {
       key = beautifyK(key) as keyof OptionalAllDataType;
       if (map.has(key)) {
