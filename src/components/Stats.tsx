@@ -22,6 +22,8 @@ export const Stats = ({ label, value, open, color }: StatsProps) => {
             color: ${color};
             cursor: pointer;
           }
+
+          
       `}
       </style>
       <details className={styles["stats-details"]} open={open}>
@@ -30,7 +32,7 @@ export const Stats = ({ label, value, open, color }: StatsProps) => {
             {label.charAt(0).toUpperCase() + label.slice(1)}
           </span>
         </summary>
-        <div style={{ marginLeft: "50px", fontWeight: "bold" }}>{value}</div>
+        <div style={{ fontWeight: "bold" }}>{value}</div>
       </details>
     </>
   );

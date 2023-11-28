@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState, useRef, useMemo } from "react";
+import { ChartData } from "chart.js";
 import creatures from "@Data";
 import {
   cleanData,
@@ -7,8 +8,9 @@ import {
   resize,
   filterCreaturesBySearch,
   getInViewCreatures,
+  expCsv,
+  isDevEnv,
 } from "@Helpers";
-import { ChartData } from "chart.js";
 import {
   RadarChart,
   ListElement,
@@ -19,16 +21,17 @@ import {
   Stats,
   SearchInput,
   Title,
+  FrameAndChart,
+  IFrame,
 } from "@Components";
 import { useMap } from "@Hooks";
-import { expCsv } from "./helpers/helpers";
-import { IFrame } from "./components/IFrame";
 
 console.log("START");
 
 const LIMITER = 2194 as const; // LIMITER NEVER CHANGES => 2194 creatures
 
 const App = () => {
+  isDevEnv() && console.time("APP TIME");
   // STATES
   //--
 
@@ -73,7 +76,10 @@ const App = () => {
   const filteredData = filterCreaturesBySearch(data, search, "name");
   const unFoldedCount = filteredData.finalData.filter((_, i) => map.seeCreature[i]).length;
   const { inViewCharts, inViewCreatures } = getInViewCreatures(filteredData, scroll, unFoldedCount);
+  // NOT USED
   listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
+
+  isDevEnv() && console.timeEnd("APP TIME");
 
   return (
     <>
@@ -130,15 +136,7 @@ const App = () => {
                       );
                     })}
                   </StatsContainer>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      width: "100%",
-                      marginTop: "20px",
-                      gap: "20px",
-                    }}
-                  >
+                  <FrameAndChart>
                     <ChartContainer isOpen={map.openRadar[i]}>
                       <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
                     </ChartContainer>
@@ -147,7 +145,7 @@ const App = () => {
                         <IFrame name={name} />
                       </>
                     )}
-                  </div>
+                  </FrameAndChart>
                 </>
               )}
             </ListElement>

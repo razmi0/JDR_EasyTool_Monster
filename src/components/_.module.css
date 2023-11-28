@@ -32,11 +32,14 @@ li {
   margin-top: 5px;
   margin-bottom: 5px;
 }
-.statsAndChart-ctn {
+.frameAndChart-ctn {
   display: flex;
-  /* justify-content: space-between; */
-  gap: 15px;
+  gap: 20px;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
 }
+
 .chart-global-ctn {
   display: grid;
   place-items: center;

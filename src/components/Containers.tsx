@@ -1,7 +1,15 @@
 import { ElementType, HTMLAttributes, ReactNode, forwardRef, useId } from "react";
+import { scrollToTop } from "@Helpers"; // getCreaViewTransition
+import { Fire } from "@Components";
 import styles from "./_.module.css";
-import { scrollToTop } from "../helpers/helpers";
-import { Fire } from "@/components/icons/Icons";
+
+export const FrameAndChart = ({ children }: Container) => {
+  return (
+    <div id="frameAndChart" className={styles["frameAndChart-ctn"]}>
+      {children}
+    </div>
+  );
+};
 
 type Container = { children: ReactNode };
 interface ListProps extends HTMLAttributes<HTMLLIElement> {}
@@ -33,7 +41,7 @@ export const VisibilityManager = ({
   handleOpenIFrame,
   children,
 }: NameProps) => {
-  const id = useId().replace(/:/g, "_") + "_button";
+  const id = useId().replace(/:/g, "_") + `_button_${name.replace(/\s/g, "")}`;
 
   return (
     <div id="name" className={styles["name-ctn"] + " " + id}>
@@ -78,7 +86,7 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
 }
 const Button = ({ children, ...props }: ButtonProps) => {
   return (
-    <button {...props} className={styles["button-style"] + " " + props.id}>
+    <button {...props} className={styles["button-style"] + " " + props.id + " " + props.className}>
       {children}
     </button>
   );
@@ -90,33 +98,6 @@ interface TitleProps extends Container {
 export const Title = ({ children, as: Element = "h1" }: TitleProps) => {
   return <Element style={{ width: "100%", textAlign: "center" }}>{children}</Element>;
 };
-
-/* <button className={styles["button-style"] + " " + id} onClick={handleOpenStats}>
-          {children[0]}
-        </button>
-        <button
-          data-btn-color={id}
-          className={styles["button-style"] + " " + id}
-          onClick={handleOpenRadar}
-        >
-          {children[1]}
-        </button>
-        <button className={styles["button-style"] + " " + id} onClick={handleSeeCreature}>
-          {children[2]}
-        </button> */
-
-// button {
-//   border-radius: 8px;
-//   border: 1px solid transparent;
-//   padding: 0.6em 1.2em;
-//   font-size: 1em;
-//   font-weight: 500;
-//   font-family: inherit;
-//   background-color: #1a1a1a;
-//   cursor: pointer;
-//   transition: border-color 0.25s;
-//   color: #fff;
-// }
 
 export const StatsAndChart = ({ children }: Container) => {
   return (

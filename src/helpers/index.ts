@@ -26,6 +26,8 @@ export {
   filterCreaturesBySearch,
   getInViewCreatures,
   resize,
+  expCsv,
+  withViewTransition,
   forwardView,
   getGenericStats,
   getRandomColor,

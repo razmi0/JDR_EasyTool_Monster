@@ -9,7 +9,9 @@ export {
   StatsAndChart,
   StatsContainer,
   Title,
+  FrameAndChart,
 } from "./Containers";
 export { SearchInput } from "./SearchInput";
 export { Stats } from "./Stats";
 export { Fire } from "./icons/Icons";
+export { IFrame } from "./IFrame";

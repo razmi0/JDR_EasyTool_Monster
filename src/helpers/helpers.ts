@@ -1,5 +1,6 @@
 import { ChartKeys, DataType, OptionalAllDataType } from "@/types";
 import { ChartData } from "chart.js";
+import { flushSync } from "react-dom";
 
 const VIEW_LIMITER = 100 as const;
 const FOLDED_VIEW_CONVERTER = 5 as const;
@@ -220,4 +221,17 @@ export const expCsv = (data: Record<string, string>[]) => {
   document.body.removeChild(link);
 };
 
+export const withViewTransition = <T>(fn: (args?: T) => void, args?: T) => {
+  const isTransitionable = document.startViewTransition;
+  if (!isTransitionable) {
+    fn(args);
+  } else {
+    document.startViewTransition(() => {
+      isDevEnv() && console.log("viewTransition happening");
+      flushSync(() => {
+        fn(args);
+      });
+    });
+  }
+};
 //
