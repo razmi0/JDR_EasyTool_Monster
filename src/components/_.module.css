@@ -39,6 +39,7 @@ li {
 }
 .chart-global-ctn {
   display: grid;
+  place-items: center;
 }
 .chart-ctn {
   display: flex;
@@ -59,7 +60,7 @@ li {
 }
 
 .stats-details {
-  display: block;
+  display: inline;
   /* align-items: center; */
   width: fit-content;
 }

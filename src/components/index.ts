@@ -5,7 +5,7 @@ export {
   ChartContainer,
   ChartTitle,
   ListElement,
-  NameButtons,
+  VisibilityManager,
   StatsAndChart,
   StatsContainer,
   Title,
