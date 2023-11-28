@@ -12,8 +12,7 @@ import { ChartData } from "chart.js";
 import {
   RadarChart,
   ListElement,
-  NameButtons,
-  StatsAndChart,
+  VisibilityManager,
   ChartContainer,
   StatsContainer,
   Anchor,
@@ -41,8 +40,8 @@ const App = () => {
 
   const listRef = useRef<HTMLLIElement[] | null>(null);
   const { map, toggle } = useMap(
-    ["openRadar", "openStats", "seeCreature"],
-    [LIMITER, LIMITER, LIMITER]
+    ["openRadar", "openStats", "seeCreature", "openIFrame"],
+    [LIMITER, LIMITER, LIMITER, LIMITER]
   );
 
   useEffect(() => {
@@ -80,10 +79,12 @@ const App = () => {
     <>
       <button
         style={{ position: "absolute", margin: "3rem" }}
-        onClick={() => expCsv(data.finalData)}
+        onClick={() => expCsv(filteredData.finalData)}
       >
         Export as CSV
       </button>
+      <Anchor />
+
       <Title as={"h1"}>Mythical Creatures</Title>
       <SearchInput handleSearch={handleSearch} searchedSize={filteredData.finalData.length} />
       <ul style={{ all: "unset" }}>
@@ -98,19 +99,22 @@ const App = () => {
               ref={handleRefs(i)}
               id={`ref_${i}_${name.toLowerCase().replace(/\s/g, "")}`}
             >
-              <NameButtons
+              <VisibilityManager
                 name={name}
                 color={colors[i]}
-                handleOpenRadar={() => toggle(i, "openRadar")}
+                reveal={map.seeCreature[i]}
                 handleOpenStats={() => toggle(i, "openStats")}
+                handleOpenRadar={() => toggle(i, "openRadar")}
+                handleOpenIFrame={() => toggle(i, "openIFrame")}
                 handleSeeCreature={() => toggle(i, "seeCreature")}
               >
-                <>Reveal stats</>
-                <>Reveal radar</>
-                <>Fold</>
-              </NameButtons>
+                {map.openStats[i] ? <>Hide stats</> : <>See stats</>}
+                {map.openRadar[i] ? <>Hide radar</> : <>Reveal radar</>}
+                {map.openIFrame[i] ? <>Hide iframe</> : <>See iframe</>}
+                {map.seeCreature[i] ? <>Hide creature</> : <>See creature</>}
+              </VisibilityManager>
               {map.seeCreature[i] && (
-                <StatsAndChart>
+                <>
                   <StatsContainer>
                     {rest.map(([label, value]) => {
                       return value === "" || inViewCharts[i].labels.includes(label) ? (
@@ -131,20 +135,25 @@ const App = () => {
                       display: "flex",
                       flexDirection: "column",
                       width: "100%",
+                      marginTop: "20px",
+                      gap: "20px",
                     }}
                   >
                     <ChartContainer isOpen={map.openRadar[i]}>
                       <RadarChart data={inViewCharts[i] as ChartData<"radar">} color={colors[i]} />
                     </ChartContainer>
-                    <IFrame name={name} />
+                    {map.openIFrame[i] && (
+                      <>
+                        <IFrame name={name} />
+                      </>
+                    )}
                   </div>
-                </StatsAndChart>
+                </>
               )}
             </ListElement>
           );
         })}
       </ul>
-      <Anchor />
     </>
   );
 };
