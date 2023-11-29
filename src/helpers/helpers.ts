@@ -196,18 +196,12 @@ export const getInViewCreatures = (data: FinalDataType, scroll: number, unFolded
   return { inViewCharts, inViewCreatures };
 };
 
-export const expCsv = (data: Record<string, string>[], names: string[]) => {
+export const expCsv = (data: Record<string, string>[]) => {
   const csvContent =
     Object.keys(data[0])
-      .concat("Link ,")
       .map((lbl) => lbl.charAt(0).toUpperCase() + lbl.slice(1))
       .join(",") +
     "\n" +
-    names
-      .map((name) => {
-        return `https://2e.aonprd.com/Creatures.aspx?q=${name.toLowerCase()}&sort=name-asc&display=table&columns=creature_family+source+rarity+size+alignment+trait+level+hp+ac+fortitude+reflex+will+perception+sense+speed`;
-      })
-      .join(",") +
     data
       .map((e) =>
         Object.values(e)

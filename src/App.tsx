@@ -76,7 +76,7 @@ const App = () => {
   const filteredData = filterCreaturesBySearch(data, search, "name");
   const unFoldedCount = filteredData.finalData.filter((_, i) => map.seeCreature[i]).length;
   const { inViewCharts, inViewCreatures } = getInViewCreatures(filteredData, scroll, unFoldedCount);
-  const names = filteredData.finalData.map((creature) => creature.name);
+  // const names = filteredData.finalData.map((creature) => creature.name);
   // NOT USED
   listRef.current = resize(listRef.current ?? [], inViewCreatures.length);
 
@@ -86,7 +86,7 @@ const App = () => {
     <>
       <button
         style={{ position: "absolute", margin: "3rem" }}
-        onClick={() => expCsv(filteredData.finalData, names)}
+        onClick={() => expCsv(filteredData.finalData)}
       >
         Export as CSV
       </button>
